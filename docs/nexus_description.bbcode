@@ -1,0 +1,67 @@
+[size=5][b]Debug Draw[/b][/size]
+[size=3]Draw lines, shapes, text and graphs in the world from your mod, and see what the engine sees: collision, navmesh and trigger volumes.[/size]
+
+[size=4][b]Description[/b][/size]
+Debug Draw is a resource for mod authors. It turns the game's own debug renderer back on and hands it to redscript and Cyber Engine Tweaks, so one line of script puts a line, box, sphere, arrow, label or live graph in the world. Use it to see raycasts, AI targets, spawn radii, paths, vehicle forces, or anything else your mod is doing, right where it happens.
+
+It also works on its own: switch on the world overlays from its settings page to see the collision, navmesh and trigger volumes around V, no scripting needed.
+
+It is a native C++ RED4ext plugin. Shapes go straight to the engine's debug renderer, not through ink widgets or spawned entities, so it keeps up with tens of thousands of lines a frame. (In engine terms: every camera normally gets a NullDebugDrawer that throws everything away. This hands it a real one.)
+
+[size=4][b]Main features[/b][/size]
+[list]
+[*][b]Shapes:[/b] lines, paths, arrows, boxes, oriented boxes, spheres, circles, discs, capsules, cylinders, cones, axes gizmos, triangles and polygons, as wireframes or filled (with transparency), with an optional line thickness.
+[*][b]Text and data:[/b] world text with a readable outline, screen text, labels that follow entities, and rolling graphs (Plot) for values that change every frame.
+[*][b]Helpers:[/b] Raycast and Trace draw a ray you cast and where it hit; Bounds and Velocity draw an entity's bounding box and velocity arrow; Heat turns a value into a blue-to-red colour.
+[*][b]Timing and ownership:[/b] draw for one frame or for N seconds; every shape belongs to a channel, so Clear only removes your own.
+[*][b]Following things:[/b] PushTransform and PushEntity put shapes in a local space; shapes queued under an entity stay on it as it moves.
+[*][b]Seeing it clearly:[/b] overlay mode draws through walls, X-ray shows a channel's hidden shapes faintly, and Dim darkens the scene so debug shapes stand out.
+[*][b]World overlays:[/b] wireframes of the physics shapes (static in pale green, moving in orange), the navmesh NPCs walk on, and trigger volumes. Turn them on around V from the settings page, or draw them around any point from script. Moving bodies are updated every frame, so their wireframes stay on the cars and NPCs.
+[*][b]Materials and custom shaders:[/b] built-in looks (lit, grid, hologram, distance fade, pulse, scanlines, stripes), material parameters you can change from script, and your own HLSL shaders through the included compiler. Shaders reload in game without a restart.
+[*][b]Settings[/b] (with Mod Settings): show or hide everything any mod draws, text size, label distance, dim strength, and the world overlays.
+[/list]
+
+[size=4][b]Quick start[/b][/size]
+From redscript:
+[code]
+DebugDraw.Line(a, b, DebugDraw.Rgba(255, 64, 0), 5.0);           // for 5 seconds
+DebugDraw.Sphere(center, 2.0, DebugDraw.Rgba(0, 128, 255));        // this frame
+DebugDraw.Label(npc, "searching", DebugDraw.Rgba(255, 255, 255), 0.0, n"my_mod");
+DebugDraw.Plot("speed", speed);
+DebugDrawOverlays.ShowCollision(GetPlayer(game).GetWorldPosition(), 15.0);
+[/code]
+From a CET mod or the CET console, the same functions work:
+[code]
+DebugDraw.Sphere(Vector4.new(p.x, p.y, p.z + 2.5, 1), 0.5, DebugDraw.Rgba(255, 128, 0, 0))
+[/code]
+The full API, a cookbook of common uses, and the shader guide are in the readme included in the download.
+
+[size=4][b]Installation instructions[/b][/size]
+Install with a mod manager, or by hand: extract the archive into the game folder (the one with bin, archive and r6), so the files land in red4ext/plugins/debug_draw and archive/pc/mod.
+
+To check it works: with Mod Settings installed, open Mod Settings from the pause menu and turn on Debug Draw > World overlays > Show overlays around V, and the collision and navmesh around V should appear. Without it, look in red4ext/logs for a debug_draw log: a working install logs "Added the debug render nodes to the main render graph" when a save loads.
+
+[size=4][b]Requirements[/b][/size]
+[list]
+[*][b]RED4ext[/b] 1.31.0 or newer
+[*][b]Redscript[/b] 0.5.32 or newer
+[*][b]Mod Settings[/b] (optional) for the settings page; without it the defaults apply
+[*][b]Cyber Engine Tweaks[/b] (optional) to draw from CET
+[/list]
+Built for Cyberpunk 2077 2.5 (executable 3.0.88). Engine functions are found by hash, so other versions may work; if one is not found, the log says so and the mod draws nothing, while scripts that call it still compile and run.
+
+[size=4][b]For mod authors[/b][/size]
+[list]
+[*]Use your own channel name (for example n"my_mod") so your shapes, Clear calls, materials and X-ray settings never touch another mod's.
+[*]Debug shapes are drawn after the game's lighting: they never get its shadows or lights. The lit, grid and hologram materials do their own shading.
+[*]Players can hide all debug drawing and change text size from the settings page, so you can leave your debug drawing in and let them switch it off.
+[/list]
+
+[size=4][b]Shout outs[/b][/size]
+[list]
+[*]WopsS and contributors for RED4ext and the RED4ext SDK, which this plugin is built on.
+[*]jekky and contributors for redscript.
+[*]The Cyber Engine Tweaks team.
+[*]The WolvenKit team: the shader compiler uses WolvenKit to build materials.
+[*]CD PROJEKT RED for leaving such a complete debug renderer in the game.
+[/list]

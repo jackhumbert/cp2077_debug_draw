@@ -1,0 +1,13 @@
+# debug_draw shaders for Debug Draw, made by tools/shaderc. material <template name> <donor> <pixel shader>
+material debug_draw_pulse debugdraw pulse.dxbc
+material debug_draw_scanlines debugdraw scanlines.dxbc
+material debug_draw_lit debugdraw lit.dxbc
+vertex debug_draw_lit 46AB074CDBB5F2E3 lit.drawbuffer.vs.dxbc
+vertex debug_draw_lit 687287DC8EC613C8 lit.debug.vs.dxbc
+material debug_draw_grid debugdraw grid.dxbc
+vertex debug_draw_grid 46AB074CDBB5F2E3 grid.drawbuffer.vs.dxbc
+vertex debug_draw_grid 687287DC8EC613C8 grid.debug.vs.dxbc
+material debug_draw_hologram debugdraw hologram.dxbc
+vertex debug_draw_hologram 46AB074CDBB5F2E3 hologram.drawbuffer.vs.dxbc
+vertex debug_draw_hologram 687287DC8EC613C8 hologram.debug.vs.dxbc
+material debug_draw_fade debugdraw fade.dxbc
